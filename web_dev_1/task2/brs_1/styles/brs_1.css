@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@300;400;500&display=swap');
+
+:root {
+  --bg:        #0a0a0a;
+  --surface:   #141414;
+  --border:    #2a2a2a;
+  --accent:    #e8ff00;   /* amarillo neón */
+  --accent2:   #ff3c00;   /* naranja racing */
+  --text:      #f0f0f0;
+  --muted:     #888;
+  --radius:    4px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Encabezados ── */
+h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+  position: relative;
+  display: inline-block;
+}
+h1::after {
+  content: '';
+  display: block;
+  height: 5px;
+  width: 60%;
+  background: var(--accent);
+  margin-top: 10px;
+}
+h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  margin: 1.8rem 0 0.6rem;
+}
+h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin: 1.4rem 0 0.5rem;
+}
+h4 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+}
+
+/* ── Body layout ── */
+body > *:not(footer) {
+  max-width: 860px;
+  margin-inline: auto;
+  padding: 1.5rem 2rem;
+}
+
+/* ── Párrafos ── */
+p {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+  max-width: 65ch;
+}
+
+/* ── Imágenes ── */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  display: block;
+  margin: 1rem 0;
+}
+
+/* ── Secciones ── */
+section {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+
+/* ── Links ── */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+a:hover { color: var(--accent2); text-decoration: underline; }
+
+/* ── Details / Summary ── */
+details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  margin: 0.75rem 0;
+  overflow: hidden;
+}
+details > p, details > a, details > details {
+  padding: 0.6rem 1.2rem;
+  display: block;
+}
+summary {
+  padding: 0.85rem 1.2rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text);
+  transition: background 0.2s;
+}
+summary:hover { background: #1e1e1e; }
+summary::after { content: '+'; color: var(--accent); font-size: 1.4rem; }
+details[open] summary::after { content: '−'; }
+
+/* ── Footer ── */
+footer {
+  background: var(--surface);
+  border-top: 3px solid var(--accent);
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+  margin-top: 3rem;
+}
+footer p { margin: 0; font-size: 0.9rem; }
+footer small {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-left: auto;
+  letter-spacing: 0.1em;
+}
