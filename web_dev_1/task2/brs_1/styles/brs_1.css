@@ -7,13 +7,25 @@
   --accent:    #e8ff00;   /* amarillo neón */
   --accent2:   #ff3c00;   /* naranja racing */
   --text:      #f0f0f0;
-  --muted:     #888;
   --radius:    4px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
+
+header h4 a {
+  background-color: var(--accent);
+  color: var(--bg);        /* negro, contrasta con el fondo amarillo */
+  text-decoration: none;
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+header h4 a:hover {
+  color: var(--accent2);   /* naranja al pasar el mouse */
+}
 
 body {
   background-color: var(--bg);
@@ -34,8 +46,8 @@ body {
 }
 
 .intro img {
-  width: 150px;
-  height: 100px;
+  width: 100px;
+  height: 150px;
   object-fit: cover;
   flex-shrink: 0;
   display: block;
@@ -45,7 +57,7 @@ body {
 }
 
 .intro p {
-  flex: 1;  
+  flex: 1;
   max-width: none;
   margin: 0;
 }
@@ -93,12 +105,7 @@ h4 {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--muted);
-}
-
-/* ── Body layout ── */
-body > *:not(footer) {
-
+  color: var(--text);
 }
 
 /* ── Párrafos ── */
