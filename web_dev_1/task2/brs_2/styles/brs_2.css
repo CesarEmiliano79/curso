@@ -39,6 +39,117 @@ body {
   padding: 3rem 2rem 0;
 }
 
+/* ---- HERO ---- */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 50vh;
+  background-image: url('../img/1.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-contact{
+  background-image: url('../img/2.png');
+  height: 30vh;
+}
+
+.hero-about{
+  background-image: url('../img/2.png');
+  height: 30vh;
+}
+
+.hero-about .hero-content h1,
+.hero-contact .hero-content h1 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);  /* más chico que el default */
+}
+
+.hero-about .hero-content,
+.hero-contact .hero-content {
+  padding: 1rem 2rem;  /* menos padding también */
+}
+ 
+/* oscurece un poco la imagen para que el texto sea legible */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.35) 0%,
+    rgba(0,0,0,0.1) 40%,
+    rgba(0,0,0,0.55) 100%
+  );
+  z-index: 0;
+}
+ 
+/* ---- HEADER (dentro del hero) ---- */
+header {
+  position: relative;
+  z-index: 1;
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+}
+ 
+header h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+ 
+header h4 a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+ 
+header h4 a:hover {
+  color: var(--verde-lima);
+}
+ 
+/* ---- HERO CONTENT (título centrado) ---- */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;   /* título pegado al fondo del hero */
+  padding: 3rem 2rem;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+}
+ 
+.hero-content h1 {
+  color: #ffffff;
+  animation: fadeUp 0.7s ease both;
+}
+ 
+.hero-content h2 {
+  color: rgba(255,255,255,0.85);
+  margin-top: 0.5rem;
+  animation: fadeUp 0.7s 0.15s ease both;
+}
+ 
+.hero-content h2::after {
+  background: linear-gradient(to right, var(--verde-lima), transparent);
+}
+ 
+/* ---- MAIN (contenido después del hero) ---- */
+main {
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  flex: 1;
+}
+
 /* ---- TIPOGRAFÍA ---- */
 h1 {
   font-family: 'DM Serif Display', serif;
@@ -106,7 +217,7 @@ img {
 }
 
 section > img {
-  max-height: 340px;
+  max-height: 250px;
   width: 100%;
   object-fit: cover;
   border-radius: 16px;
@@ -227,7 +338,7 @@ details summary[class~="evento"] {
 /* ---- FOOTER ---- */
 footer {
   margin-top: auto;
-  background: var(--crema);
+  background: var(--verde-lima);
   border-top: 1px solid var(--borde);
   padding: 2rem;
   display: flex;
