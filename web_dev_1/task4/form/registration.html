@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <title>Bike Race</title>
+</head>
+<body>
+    <div class="hero hero-contact">
+        <header>
+            <h4><a href="../index.html">Bike Race</a></h4>
+            <nav>
+                <a href="../pages/about.html">Acerca de</a>
+                <a href="../pages/rules.html">Reglas</a>
+            </nav>
+        </header>
+        <div class="hero-content">
+            <h1>Registro</h1>
+            <h2>¡Que comience la aventura!</h2>
+        </div>
+    </div>
+
+    <header>
+        <h1>Formulario de Registro</h1>
+        <p>Registro para Competencia de Ciclismo</p>
+    </header>
+
+    <div class="container">
+
+        <form id="miFormulario" action="show_data.html" method="GET">
+
+            <!-- Datos personales -->
+            <label for="first_name">Nombre</label>
+            <input type="text" id="first_name" name="first_name" required>
+
+            <label for="last_name">Apellido</label>
+            <input type="text" id="last_name" name="last_name" required>
+
+            <label for="street_address">Dirección de la calle</label>
+            <input type="text" id="street_address" name="street_address">
+
+            <label for="city">Ciudad</label>
+            <input type="text" id="city" name="city">
+
+            <label for="postal_code">Código Postal</label>
+            <input type="text" id="postal_code" name="postal_code">
+
+            <label for="country">País</label>
+            <input type="text" id="country" name="country">
+
+            <label for="birth_date">Fecha de nacimiento</label>
+            <input type="date" id="birth_date" name="birth_date">
+
+            <label for="age">Edad</label>
+            <input type="number" id="age" name="age">
+
+            <label for="mobile_phone">Teléfono móvil</label>
+            <input type="tel" id="mobile_phone" name="mobile_phone">
+
+            <label for="email">Dirección de correo electrónico</label>
+            <input type="email" id="email" name="email">
+
+            <!-- Menús desplegables -->
+            <label for="club_membership">Membresía de Club</label>
+            <select id="club_membership" name="club_membership">
+                <option value="Ninguna">Ninguna</option>
+                <option value="Club Local">Club Local</option>
+                <option value="Club Profesional">Club Profesional</option>
+            </select>
+
+            <label for="cycling_experience">
+                Experiencia Previa en Ciclismo Competitivo
+            </label>
+            <select id="cycling_experience" name="cycling_experience">
+                <option value="Principiante">Principiante</option>
+                <option value="Intermedio">Intermedio</option>
+                <option value="Avanzado">Avanzado</option>
+            </select>
+
+            <label for="cycling_license">Licencia de Ciclismo</label>
+            <select id="cycling_license" name="cycling_license">
+                <option value="Sí">Sí</option>
+                <option value="No">No</option>
+            </select>
+
+            <!-- Radio buttons -->
+            <label>Género</label>
+            <div class="radio-group">
+                <input type="radio" id="male" name="gender" value="Masculino">
+                <label for="male">Masculino</label>
+
+                <input type="radio" id="female" name="gender" value="Femenino">
+                <label for="female">Femenino</label>
+
+                <input type="radio" id="other" name="gender" value="Otro">
+                <label for="other">Otro</label>
+            </div>
+
+            <!-- Checkboxes -->
+            <label>Modalidades de interés</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="mountain" name="cycling_type" value="Montaña">
+                <label for="mountain">Montaña</label>
+
+                <input type="checkbox" id="road" name="cycling_type" value="Ruta">
+                <label for="road">Ruta</label>
+
+                <input type="checkbox" id="bmx" name="cycling_type" value="BMX">
+                <label for="bmx">BMX</label>
+            </div>
+
+            <!-- Contacto de emergencia -->
+            <h2>Contacto de Emergencia</h2>
+
+            <label for="emergency_name">Nombre del Contacto</label>
+            <input type="text" id="emergency_name" name="emergency_name">
+
+            <label for="emergency_phone">Teléfono del Contacto</label>
+            <input type="tel" id="emergency_phone" name="emergency_phone">
+
+            <!-- Acuerdo -->
+            <div class="agreement">
+                <h2>Acuerdo del Participante</h2>
+
+                <p>
+                    Declaro que la información proporcionada es correcta y acepto
+                    participar bajo mi propia responsabilidad. También acepto seguir
+                    las reglas y medidas de seguridad del evento.
+                </p>
+            </div>
+
+            <label>Firma Digital</label>
+            <div>
+                <canvas id="canvasFirma" width="400" height="200"></canvas>
+
+                <br>
+
+                <button type="button" id="limpiarBtn">
+                Limpiar Firma
+                </button>
+
+                <!-- Campo oculto para guardar la firma -->
+                <input type="hidden" name="digital_signature" id="firmaInput">
+            </div>
+            <label for="agreement_date">Fecha</label>
+            <input type="date" id="agreement_date" name="agreement_date">
+
+            <button type="submit">Enviar</button>
+
+        </form>
+
+    </div>
+    <footer>
+        <p><a href="../pages/rules.html">Reglas</a></p>
+        <p><a href="../pages/about.html">Acerca de nosotros</a></p>
+        <p><a href="../pages/contact-us.html">Contactanos</a></p>
+        <small>&copy; Bike Race</small>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
