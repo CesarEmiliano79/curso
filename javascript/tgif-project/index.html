@@ -17,92 +17,81 @@
         <div class="container">
             <img src="./img/logo.png">
         </div>
+        <br>
+        <div>
+          <nav class="navbar navbar-expand-lg" style="background-color: #e9ecef;">
+            <div class="container">
+
+              <!-- Botón hamburguesa para móvil -->
+              <button class="navbar-toggler" type="button" 
+                      data-bs-toggle="collapse" 
+                      data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <!-- Links -->
+              <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto">
+
+                  <!-- Home -->
+                  <li class="nav-item">
+                    <a class="nav-link" href="index.html">
+                      <i class="bi bi-house me-1"></i>Home
+                    </a>
+                  </li>
+
+                  <!-- Congress 117 con dropdown -->
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" 
+                      role="button" 
+                      data-bs-toggle="dropdown">
+                      <i class="bi bi-building me-1"></i>Congress 113
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a class="dropdown-item" href="./page/house.html">
+                          <i class="bi bi-person-badge me-2"></i>House
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="./page/senate.html">
+                          <i class="bi bi-people me-2"></i>Senate
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
+                </ul>
+              </div>
+
+            </div>
+          </nav>
+        </div>
     </header>
     <div class="container">
       <h1>
-        <i class="bi bi-envelope me-2"></i>Senators
+        <i class="bi bi-envelope me-2"></i>About Us
       </h1>
       <p>
-        First convened in 1789, the composition and powers of the Senate are established 
-        in Article One of the U.S. Constitution. Each state is represented by two senators, 
-        regardless of population, who serve staggered six-year terms. The Senate has 
-        several exclusive powers not granted to the House, including consenting to 
-        treaties as a precondition to their ratification and consenting to or confirming 
-        appointments of Cabinet secretaries, federal judges, other federal executive 
-        officials, military officers, regulatory officials, ambassadors, and other federal 
-        uniformed officers, as well as trial of federal officials impeached by the House.
+        Openness, accountability, and honesty define government transparency. In a free society, transparency is government's obligation to share information with citizens. It is at the heart of how citizens hold their public officials accountable. Here at TGIF we believe that government should be transparent.
+        Governments exist to serve the people. Information on how officials conduct the public business and spend taxpayer money must be readily available and easily understood. This transparency allows good and just governance. Transparency promotes accountability and provides information for citizens about what their Government is doing.
+        We also believe that government should be participatory. Public engagement enhances the Government's effectiveness and improves the quality of its decisions. Knowledge is widely dispersed in society, and public officials benefit from having access to that dispersed knowledge. We invite you to use our site to become actively engaged in American government.
+        TGIF works to disclose information in forms that the public can readily find and use. We solicit public feedback to identify information of greatest use to the public.
       </p>
-      <div class="mb-3" id="party-checkboxes">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input party-filter" type="checkbox" value="D" id="chk-D" checked>
-          <label class="form-check-label" for="chk-D">Democrat</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input party-filter" type="checkbox" value="R" id="chk-R" checked>
-          <label class="form-check-label" for="chk-R">Republican</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input party-filter" type="checkbox" value="ID" id="chk-ID" checked>
-          <label class="form-check-label" for="chk-ID">Independent</label>
-        </div>
-      </div>
-      <div class="col-auto">
-         <label for="filter-field" class="form-label">Filter by</label>
-          <select class="form-select" id="filter-field">
-          <option value="state">State</option>
-         </select>
-      </div>
-      <table class="table table-striped table-hover">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Party</th>
-                <th>State</th>
-                <th>Years in Office</th>
-                <th>% Votes with Party</th>
-            </tr>
-        </thead>
-        <tbody id="senate-body">
-            
-        </tbody>
-      </table>
+      <h2>
+        <i class="bi bi-envelope me-2"></i>Background History of Government Transparency
+      </h2>
+      <p>
+        In the West, the idea that government should be open to public scrutiny and susceptible to public opinion dates back at least to the time of the Enlightenment, when many philosophes made an attack on absolutist doctrine of state secrecy, a core part of their intellectual project. The passage of formal legislative instruments to this end can also be traced to this time with Sweden, for example, (which then included Finland as a Swedish-governed territory) enacting free press legislation as part of its constitution (Freedom of the Press Act, 1766). This approach, and that of the philosophes more broadly, is strongly related to recent historiography on the eighteenth-century public sphere.
+        Influenced by Enlightenment thought, the revolutions in America (1776) and France (1789), freedom of the press enshrined provisions and requirements for public budgetary accounting and freedom of the press in constitutional articles. In the nineteenth century, attempts by Metternichean statesmen to row back on these measures were vigorously opposed by a number of eminent liberal politicians and writers, Bentham, Mill and Acton prominent among the latter.
+        Open government is widely seen to be a key hallmark of contemporary democratic practice and is often linked to the passing of freedom of information legislation. Scandinavian countries claim to have adopted the first freedom of information legislation, dating the origins of its modern provisions to the eighteenth century and Finland continuing the presumption of openness after gaining independence in 1917, passing its Act on Publicity of Official Documents in 1951 (superseded by new legislation in 1999).
+        The United States passed its Freedom of Information Act (FOIA) in 1966, FOIAs, Access to Information Acts (AIAs) or equivalent laws were passed in Denmark and Norway in 1970.
+      </p>
+
     </div>
     <footer class="py-3 mt-4 border-top text-center text-muted">
         <p class="mb-0">© 2025 TGIF | All Rights Reserved</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module">
-        import { fetchJson, makeMemberRows, populateStateOptions } from './scripts/html.js';
-
-        function getSelectedParties() {
-            return [...document.querySelectorAll('.party-filter:checked')]
-            .map((cb) => cb.value);
-        }
-
-        const stateSelect = document.querySelector('#filter-field');
-
-        fetchJson('./data/pro-congress-117-senate.json').then((data) => {
-
-            // Llena el select con los estados del JSON
-            populateStateOptions(data, stateSelect);
-
-            function updateTable() {
-            const selectedParties = getSelectedParties();
-            const selectedState = stateSelect.value;
-            document.querySelector('#senate-body').innerHTML = 
-                makeMemberRows(data, selectedParties, selectedState);
-            }
-
-            // Cargar tabla inicial
-            updateTable();
-
-            // Eventos
-            document.querySelectorAll('.party-filter').forEach((cb) => {
-            cb.addEventListener('change', updateTable);
-            });
-
-            stateSelect.addEventListener('change', updateTable);
-        });
-    </script>
 </body>
 </html>
