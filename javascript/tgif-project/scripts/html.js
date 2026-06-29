@@ -70,3 +70,110 @@ export function getChamberConfig(chamber) {
   };
   return config[chamber] || config.senate;
 }
+
+// ─── ESTADÍSTICAS ───────────────────────────────────────────
+
+// Cuenta miembros por partido en una cámara: { D: 49, R: 51, ID: 2 }
+function countByParty(members) {
+  return members.reduce((acc, m) => {
+    acc[m.party] = (acc[m.party] || 0) + 1;
+    return acc;
+  }, {});
+}
+
+// Promedio de un campo numérico agrupado por partido
+// Ignora miembros con valor null/undefined
+function avgByParty(members, field) {
+  const totals = {};
+  const counts = {};
+
+  members.forEach((m) => {
+    if (m[field] == null) return;
+    totals[m.party] = (totals[m.party] || 0) + m[field];
+    counts[m.party] = (counts[m.party] || 0) + 1;
+  });
+
+  const result = {};
+  for (const party in totals) {
+    result[party] = counts[party] ? totals[party] / counts[party] : NaN;
+  }
+  return result;
+}
+
+// Devuelve el top N% de members ordenados por field (asc o desc)
+// Ignora miembros sin ese campo
+function topPercent(members, field, order = 'desc', pct = 0.1) {
+  const valid = members.filter((m) => m[field] != null);
+  const sorted = [...valid].sort((a, b) =>
+    order === 'desc' ? b[field] - a[field] : a[field] - b[field]
+  );
+  const n = Math.max(1, Math.ceil(sorted.length * pct));
+  return sorted.slice(0, n);
+}
+
+// Calcula todas las estadísticas para una cámara y las agrega al objeto data
+export function calculateStatistics(data) {
+    data.results.forEach((chamber) => {
+        // Normalizar: si un miembro no tiene missed_votes_pct (House), calcularlo
+        const members = chamber.members.map((m) => ({
+          ...m,
+          missed_votes_pct: m.missed_votes_pct ??
+            (m.total_votes > 0
+              ? parseFloat(((m.missed_votes / m.total_votes) * 100).toFixed(2))
+              : 0)
+    }));
+    chamber.statistics = {
+      counts:      countByParty(members),
+      missed:      avgByParty(members, 'missed_votes_pct'),
+      loyalty:     avgByParty(members, 'votes_with_party_pct'),
+      leastEngaged: topPercent(members, 'missed_votes_pct', 'desc'),
+      mostEngaged:  topPercent(members, 'missed_votes_pct', 'asc'),
+      leastLoyal:   topPercent(members, 'votes_with_party_pct', 'asc'),
+      mostLoyal:    topPercent(members, 'votes_with_party_pct', 'desc'),
+    };
+  });
+  return data;
+}
+
+// ─── GENERADORES DE HTML PARA TABLAS ────────────────────────
+
+const partyNames = { D: 'Democrat', R: 'Republican', ID: 'Independent' };
+
+function fmt(val, decimals = 1) {
+  if (val == null || isNaN(val)) return 'N/A';
+  return Number(val).toFixed(decimals);
+}
+
+// Tabla "at a glance": conteo y promedio de una métrica por partido
+export function makePartyStatsRows(stats, metricKey, metricLabel) {
+  return Object.keys(partyNames).map((p) => {
+    const count  = stats.counts[p]     ?? 0;
+    const metric = stats[metricKey]?.[p];
+    return `
+      <tr>
+        <td>${partyNames[p]}</td>
+        <td>${count}</td>
+        <td>${fmt(metric)}%</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// Tabla de miembros (least/most engaged o loyal)
+export function makeMemberStatRows(members, nameField = null, pctField, label) {
+  if (!members || members.length === 0) {
+    return `<tr><td colspan="3" class="text-muted text-center">No data</td></tr>`;
+  }
+  return members.map((m) => {
+    const name = `${m.first_name} ${m.last_name}`;
+    const votes = m.missed_votes ?? m.total_votes ?? '—';
+    const pct   = fmt(m[pctField]);
+    return `
+      <tr>
+        <td><a href="${m.url || '#'}">${name}</a></td>
+        <td>${votes}</td>
+        <td>${pct}%</td>
+      </tr>
+    `;
+  }).join('');
+}
