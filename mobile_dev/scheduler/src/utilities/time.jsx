@@ -3,17 +3,17 @@ export const toggle = (x, lst) => (
 );
 
 export const terms = {
-  "F": "Fall",
-  "W": "Winter",
-  "S": "Spring"
+  F: 'Fall',
+  W: 'Winter',
+  S: 'Spring'
 };
 
 export const getCourseTerm = course => (
-  terms[course.id.charAt(0)]
+  course.term
 );
 
 export const getCourseNumber = course => (
-  course.id.slice(1, 4)
+  course.number
 );
 
 export const hasConflict = (course, selected) => (
@@ -22,11 +22,12 @@ export const hasConflict = (course, selected) => (
 
 const mapValues = (fn, obj) => (
   Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [key, fn(value)])
+    Object.entries(obj).map(([key, value]) => [key, fn(value, key)])
   )
 );
 
-const addCourseTime = course => ({
+const addCourseTime = (course, id) => ({
+  id,
   ...course,
   ...timeParts(course.meets)
 });

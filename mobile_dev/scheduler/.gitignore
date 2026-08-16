@@ -49,6 +49,13 @@ logs
 
 node_modules
 bower_components
+.env
+dist
+tmp
+temp
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 *.sublime*
 
