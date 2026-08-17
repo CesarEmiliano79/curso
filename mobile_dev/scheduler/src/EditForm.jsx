@@ -1,6 +1,7 @@
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useForm} from './useForm.jsx';
 import {timeParts} from './utilities/time.jsx';
+import {setData} from './utilities/firebase.jsx';
 
 const isValidMeets = (meets) => {
     const parts = timeParts(meets);
@@ -15,11 +16,26 @@ const validateCourseData = (key, val) => {
     }
 }
 
-const submit = (values) => alert(JSON.stringify(values));
-
 const EditForm = () => {
     const {state: course} = useLocation();
+    const navigate = useNavigate();
+    
+    const submit = async (values) => {
+        const { id, ...changes } = values;
+        const updatedCourse = { number: course.number, term: course.term, ...changes };
+
+        if (window.confirm(`Change ${id} to ${updatedCourse.title} (${updatedCourse.meets})?`)) {
+            try {
+                await setData(`courses/${id}/`, updatedCourse);
+                navigate('/');
+            } catch (error) {
+                alert(error);
+            }
+        }
+    };
     const [errors, handleSubmit] = useForm(validateCourseData, submit);
+
+    
 
     return (
         <form onSubmit={handleSubmit} noValidate className={errors ? 'was-validated' : null}>
