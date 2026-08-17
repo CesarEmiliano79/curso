@@ -4,6 +4,9 @@ import {QueryClient, QueryClientProvider, useQuery} from "@tanstack/react-query"
 import {addScheduleTimes} from './utilities/time.jsx';
 import {useData} from './utilities/firebase.jsx';
 import CourseList from './components/CourseList.jsx';
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import EditForm from './EditForm.jsx';
+
 
 const Banner = ({ title }) => (
   <header>
@@ -20,7 +23,12 @@ const Main = () => {
   return (
     <div className="container">
       <Banner title={schedule.title} />
-      <CourseList courses={schedule.courses} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<CourseList courses={schedule.courses} />} />
+          <Route path="/edit" element={<EditForm />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };
