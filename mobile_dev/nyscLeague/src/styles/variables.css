@@ -1,0 +1,20 @@
+:root {
+  --dark-green: #1e5631;
+  --dark-green-2: #123c22;
+  --lime: #a4d65e;
+  --lime-light: #d6ecb0;
+  --bg-cream: #f7faf0;
+  --white: #ffffff;
+  --text-dark: #16321f;
+  --text-gray: #6f7d6f;
+  --border: #e1e9d6;
+
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-ui: -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --sidebar-width: 240px;
+  --topbar-height: 56px;
+  --bottomnav-height: 64px;
+
+  --breakpoint-desktop: 768px;
+}
