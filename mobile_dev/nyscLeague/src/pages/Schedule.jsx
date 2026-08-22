@@ -2,10 +2,11 @@ import Accordion from '../components/ui/Accordion.jsx'
 import LocationCard from '../components/ui/LocationCard.jsx'
 import { septemberGames, octoberGames } from '../data/games.js'
 import { locations } from '../data/locations.js'
+import Placeholder from '../components/ui/Placeholder.jsx'
 
 function ScheduleTable({ month, games }) {
   return (
-    <table className="schedule-table">
+    <table className="schedule-table table table-bordered align-middle mb-4">
       <thead>
         <tr>
           <th className="month-header">{month}</th>
@@ -28,7 +29,7 @@ function ScheduleTable({ month, games }) {
   )
 }
 
-export default function GameInfo() {
+export default function Schedule() {
   const accordionItems = [
     {
       id: 'schedule',
@@ -44,11 +45,7 @@ export default function GameInfo() {
       id: 'locations',
       title: 'Game Locations',
       content: (
-        <div>
-          {locations.map((loc) => (
-            <LocationCard key={loc.id} {...loc} />
-          ))}
-        </div>
+        <Placeholder badge="Location" title="Get in Touch" />
       ),
     },
   ]
@@ -61,12 +58,12 @@ export default function GameInfo() {
 
       <Accordion items={accordionItems} defaultOpenId="schedule" />
 
-      <div className="static-row">
-        <div className="static-card">
+      <div className="static-row row g-3">
+        <div className="static-card col">
           <h3>Facility Type</h3>
           <p>Outdoor</p>
         </div>
-        <div className="static-card">
+        <div className="static-card col">
           <h3>Weather Policy</h3>
           <p>
             If deemed necessary by NYSL, games may be shortened or cancelled

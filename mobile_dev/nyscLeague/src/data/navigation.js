@@ -15,6 +15,6 @@ export const navItems = [
   { to: '/about', label: 'About', icon: AboutIcon },
   { to: '/contact', label: 'Contact', icon: MailIcon },
   { to: '/rules', label: 'Rules', icon: RulesIcon },
-  { to: '/game-info', label: 'Games', icon: CalendarIcon },
+  { to: '/schedule', label: 'Schedule', icon: CalendarIcon },
   { to: '/registration', label: 'Register', icon: RegisterIcon },
 ]

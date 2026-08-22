@@ -65,14 +65,15 @@
 /* ---------- BOTTOM NAV (mobile only) ---------- */
 .bottomnav {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
   z-index: 20;
   display: flex;
   background: var(--white);
-  border-top: 1px solid var(--border);
-  padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+  border-radius: 24px;
+  box-shadow: 0 12px 32px rgba(18, 60, 34, 0.18);
+  padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
   height: var(--bottomnav-height);
 }
 
@@ -118,9 +119,11 @@
     flex-shrink: 0;
     height: 100vh;
     position: sticky;
-    top: 0;
+    top: 16px;
+    margin: 16px 0 16px 16px;
     background: var(--white);
-    border-right: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: 0 12px 32px rgba(18, 60, 34, 0.1);
     padding: 24px 16px;
     gap: 24px;
   }

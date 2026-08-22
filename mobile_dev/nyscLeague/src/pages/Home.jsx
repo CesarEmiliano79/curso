@@ -42,21 +42,21 @@ export default function Home() {
         </p>
         <div className="hero-btns">
           <Link className="btn" to="/registration">Register a Player</Link>
-          <Link className="btn outline" to="/game-info">Game Schedule</Link>
+          <Link className="btn outline" to="/schedule">Schedule</Link>
         </div>
       </div>
 
       <h2 className="section-title">Upcoming Events</h2>
-      <div className="static-row">
-        <div className="static-card">
+      <div className="static-row row g-3">
+        <div className="static-card col">
           <h3>August 4</h3>
           <p>NYSL Fundraiser</p>
         </div>
-        <div className="static-card">
+        <div className="static-card col">
           <h3>August 16</h3>
           <p>Season Kick-off: Meet the Teams</p>
         </div>
-        <div className="static-card">
+        <div className="static-card col">
           <h3>September 1</h3>
           <p>First Game of the Season (check Game Schedule for details)</p>
         </div>
