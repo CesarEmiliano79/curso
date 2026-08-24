@@ -1,34 +1,44 @@
 import { Link } from 'react-router-dom'
 import Accordion from '../components/ui/Accordion.jsx'
 import TeamCard from '../components/ui/TeamCard.jsx'
-import GameRow from '../components/ui/GameRow.jsx'
-import { teams } from '../data/teams.js'
-import { upcomingGames } from '../data/games.js'
+import { useTeams } from '../utilities/firebase.jsx'
+
+// Mapeo simplificado de ID a rango de edad
+// Ajusta según tu estructura real (puede venir de la BD también)
+const AGE_RANGES = {
+  'U1': 'Under 8',
+  'U2': 'Under 10',
+  'U3': 'Under 12',
+  'U4': 'Under 14',
+  'U5': 'Under 16',
+  'U6': 'Under 18',
+};
 
 export default function Home() {
+  const [teams, teamsLoading, teamsError] = useTeams();
+
   const accordionItems = [
     {
       id: 'teams',
       title: 'Our Teams',
-      content: (
+      content: teamsLoading ? (
+        <p>Cargando equipos...</p>
+      ) : teamsError ? (
+        <p className="text-danger">Error al cargar los equipos</p>
+      ) : teams && teams.length > 0 ? (
         <div className="team-grid">
           {teams.map((t) => (
-            <TeamCard key={t.id} name={t.name} ageRange={t.ageRange} />
+            <TeamCard
+              key={t.id}
+              name={t.name}
+              ageRange={AGE_RANGES[t.id] || 'Age TBD'}
+            />
           ))}
         </div>
+      ) : (
+        <p>No hay equipos disponibles</p>
       ),
-    },
-    {
-      id: 'games',
-      title: 'Upcoming Games',
-      content: (
-        <div>
-          {upcomingGames.map((g, i) => (
-            <GameRow key={i} {...g} />
-          ))}
-        </div>
-      ),
-    },
+    }
   ]
 
   return (
@@ -62,7 +72,7 @@ export default function Home() {
         </div>
       </div>
 
-      <Accordion items={accordionItems} defaultOpenId="games" />
+      <Accordion items={accordionItems} defaultOpenId="teams" />
     </div>
   )
 }

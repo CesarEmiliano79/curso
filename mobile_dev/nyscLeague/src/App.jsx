@@ -6,6 +6,7 @@ import Contact from './pages/Contact.jsx'
 import Rules from './pages/Rules.jsx'
 import Schedule from './pages/Schedule.jsx'
 import Registration from './pages/Registration.jsx'
+import {useData} from './utilities/firebase.jsx'
 
 export default function App() {
   return (

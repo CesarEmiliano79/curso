@@ -1,10 +1,21 @@
 import Accordion from '../components/ui/Accordion.jsx'
 import LocationCard from '../components/ui/LocationCard.jsx'
-import { septemberGames, octoberGames } from '../data/games.js'
-import { locations } from '../data/locations.js'
+import { useLocations, useGamesByMonth, transformGameToTableRow } from '../utilities/firebase.jsx'
 import Placeholder from '../components/ui/Placeholder.jsx'
 
-function ScheduleTable({ month, games }) {
+function ScheduleTable({ month, games, loading, error }) {
+  if (loading) {
+    return <p>Cargando horarios de {month}...</p>;
+  }
+
+  if (error) {
+    return <p className="text-danger">Error al cargar los juegos de {month}</p>;
+  }
+
+  if (!games || games.length === 0) {
+    return <p>No hay juegos programados para {month}</p>;
+  }
+
   return (
     <table className="schedule-table table table-bordered align-middle mb-4">
       <thead>
@@ -16,28 +27,48 @@ function ScheduleTable({ month, games }) {
         </tr>
       </thead>
       <tbody>
-        {games.map((g, i) => (
-          <tr key={i}>
-            <td>{g.date}</td>
-            <td>{g.teams}</td>
-            <td>{g.location}</td>
-            <td>{g.time}</td>
-          </tr>
-        ))}
+        {games.map((g, i) => {
+          const row = transformGameToTableRow(g);
+          return (
+            <tr key={i}>
+              <td>{row.date}</td>
+              <td>{row.teams}</td>
+              <td>{row.location}</td>
+              <td>{row.time}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
-  )
+  );
 }
 
 export default function Schedule() {
+  // Leer juegos de septiembre (mes 8) y octubre (mes 9) de 2026
+  const [septemberGames, septLoading, septError] = useGamesByMonth(8, 2026);
+  const [octoberGames, octLoading, octError] = useGamesByMonth(9, 2026);
+  
+  // Leer ubicaciones
+  const [locations, locLoading, locError] = useLocations();
+
   const accordionItems = [
     {
       id: 'schedule',
       title: 'Fall Schedule',
       content: (
         <div>
-          <ScheduleTable month="September" games={septemberGames} />
-          <ScheduleTable month="October" games={octoberGames} />
+          <ScheduleTable 
+            month="September" 
+            games={septemberGames} 
+            loading={septLoading}
+            error={septError}
+          />
+          <ScheduleTable 
+            month="October" 
+            games={octoberGames} 
+            loading={octLoading}
+            error={octError}
+          />
         </div>
       ),
     },
@@ -45,7 +76,7 @@ export default function Schedule() {
       id: 'locations',
       title: 'Game Locations',
       content: (
-        <Placeholder badge="Location" title="Get in Touch" />
+        <Placeholder badge="Location" title="No hay ubicaciones disponibles" />
       ),
     },
   ]
