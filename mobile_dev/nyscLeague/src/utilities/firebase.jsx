@@ -91,15 +91,43 @@ export const useGames = () => {
 
     if (!gamesData) return [];
 
-    return Object.values(gamesData).map(game => ({
-      ...game,
-      team1: teamsData[game.idT1] || { id: game.idT1, name: game.idT1 },
-      team2: teamsData[game.idT2] || { id: game.idT2, name: game.idT2 },
-      location: locationsData[game.idLo] || { id: game.idLo, name: game.idLo },
+    return Object.entries(gamesData).map(([gameId, gameData]) => ({
+      ...gameData,
+      id: gameId,  // ← Esto preserva el ID único de cada juego
+      team1: teamsData[gameData.idT1] || { id: gameData.idT1, name: gameData.idT1 },
+      team2: teamsData[gameData.idT2] || { id: gameData.idT2, name: gameData.idT2 },
+      location: locationsData[gameData.idLo] || { id: gameData.idLo, name: gameData.idLo },
     }));
   }, [snapshot, teamsSnapshot, locationsSnapshot]);
-
+ 
   return [games, loading, error];
+};
+
+// ===== Hook para un juego específico =====
+export const useGame = (gameId) => {
+  const [snapshot, loading, error] = useObject(ref(database, `games/${gameId}`));
+  const [teamsSnapshot] = useObject(ref(database, 'teams'));
+  const [locationsSnapshot] = useObject(ref(database, 'location'));
+ 
+  const game = useMemo(() => {
+    if (!snapshot) return null;
+ 
+    const gameData = snapshot.val();
+    if (!gameData) return null;
+ 
+    const teamsData = teamsSnapshot?.val() || {};
+    const locationsData = locationsSnapshot?.val() || {};
+ 
+    return {
+      ...gameData,
+      id: gameId,
+      team1: teamsData[gameData.idT1] || { id: gameData.idT1, name: gameData.idT1 },
+      team2: teamsData[gameData.idT2] || { id: gameData.idT2, name: gameData.idT2 },
+      location: locationsData[gameData.idLo] || { id: gameData.idLo, name: gameData.idLo },
+    };
+  }, [snapshot, teamsSnapshot, locationsSnapshot, gameId]);
+ 
+  return [game, loading, error];
 };
 
 // ===== Hooks para Games por mes =====

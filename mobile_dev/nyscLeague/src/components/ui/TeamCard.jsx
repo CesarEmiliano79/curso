@@ -1,8 +1,8 @@
-export default function TeamCard({ name, ageRange }) {
+export default function TeamCard({ name, info }) {
   return (
     <div className="team-card">
       <b>{name}</b>
-      <span>{ageRange}</span>
+      <span>{info}</span>
     </div>
   )
 }

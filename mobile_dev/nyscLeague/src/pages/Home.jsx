@@ -5,13 +5,13 @@ import { useTeams } from '../utilities/firebase.jsx'
 
 // Mapeo simplificado de ID a rango de edad
 // Ajusta según tu estructura real (puede venir de la BD también)
-const AGE_RANGES = {
-  'U1': 'Under 8',
-  'U2': 'Under 10',
-  'U3': 'Under 12',
-  'U4': 'Under 14',
-  'U5': 'Under 16',
-  'U6': 'Under 18',
+const info = {
+  'U1': 'Couch U1',
+  'U2': 'Couch U2',
+  'U3': 'Couch U3',
+  'U4': 'Couch U4',
+  'U5': 'Couch U5',
+  'U6': 'Couch U6',
 };
 
 export default function Home() {
@@ -31,7 +31,7 @@ export default function Home() {
             <TeamCard
               key={t.id}
               name={t.name}
-              ageRange={AGE_RANGES[t.id] || 'Age TBD'}
+              info={info[t.id] || 'Without Coach'}
             />
           ))}
         </div>

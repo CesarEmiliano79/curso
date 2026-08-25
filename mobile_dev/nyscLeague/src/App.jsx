@@ -5,6 +5,7 @@ import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import Rules from './pages/Rules.jsx'
 import Schedule from './pages/Schedule.jsx'
+import GameDetail from './pages/GameDetail.jsx'
 import Registration from './pages/Registration.jsx'
 import {useData} from './utilities/firebase.jsx'
 
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/rules" element={<Rules />} />
           <Route path="/schedule" element={<Schedule />} />
+          <Route path="/game/:id" element={<GameDetail />} />
           <Route path="/registration" element={<Registration />} />
         </Routes>
       </Layout>

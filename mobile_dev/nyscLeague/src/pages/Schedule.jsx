@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Accordion from '../components/ui/Accordion.jsx'
 import LocationCard from '../components/ui/LocationCard.jsx'
 import { useLocations, useGamesByMonth, transformGameToTableRow } from '../utilities/firebase.jsx'
@@ -29,12 +30,30 @@ function ScheduleTable({ month, games, loading, error }) {
       <tbody>
         {games.map((g, i) => {
           const row = transformGameToTableRow(g);
+          // Usar g.id como key, con fallback a índice si no está disponible
+          const key = g.id || `game-${month}-${i}`;
           return (
-            <tr key={i}>
-              <td>{row.date}</td>
-              <td>{row.teams}</td>
-              <td>{row.location}</td>
-              <td>{row.time}</td>
+            <tr key={key} style={{ cursor: 'pointer' }} className="game-row-clickable">
+              <td>
+                <Link to={`/game/${g.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {row.date}
+                </Link>
+              </td>
+              <td>
+                <Link to={`/game/${g.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {row.teams}
+                </Link>
+              </td>
+              <td>
+                <Link to={`/game/${g.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {row.location}
+                </Link>
+              </td>
+              <td>
+                <Link to={`/game/${g.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {row.time}
+                </Link>
+              </td>
             </tr>
           );
         })}
@@ -75,7 +94,22 @@ export default function Schedule() {
     {
       id: 'locations',
       title: 'Game Locations',
-      content: (
+      content: locLoading ? (
+        <p>Cargando ubicaciones...</p>
+      ) : locError ? (
+        <p className="text-danger">Error al cargar las ubicaciones</p>
+      ) : locations && locations.length > 0 ? (
+        <div className="locations-grid">
+          {locations.map(loc => (
+            <LocationCard
+              key={loc.id}
+              name={loc.name}
+              address={loc.adress}
+              mapSrc={loc.mapSrc}
+            />
+          ))}
+        </div>
+      ) : (
         <Placeholder badge="Location" title="No hay ubicaciones disponibles" />
       ),
     },
