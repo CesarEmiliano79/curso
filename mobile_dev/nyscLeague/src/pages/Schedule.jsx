@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import Accordion from '../components/ui/Accordion.jsx'
 import LocationCard from '../components/ui/LocationCard.jsx'
+import GameDetailModal from '../components/ui/GameDetailModal.jsx'
 import { useLocations, useGamesByMonth, transformGameToTableRow } from '../utilities/firebase.jsx'
 import Placeholder from '../components/ui/Placeholder.jsx'
 
-function ScheduleTable({ month, games, loading, error }) {
+function ScheduleTable({ month, games, loading, error, onGameClick }) {
   if (loading) {
     return <p>Cargando horarios de {month}...</p>;
   }
@@ -28,32 +29,20 @@ function ScheduleTable({ month, games, loading, error }) {
         </tr>
       </thead>
       <tbody>
-        {games.map((g, i) => {
+        {games.map((g) => {
           const row = transformGameToTableRow(g);
-          // Usar g.id como key, con fallback a índice si no está disponible
-          const key = g.id || `game-${month}-${i}`;
+          const key = g.id || `game-${month}-${g.date}`;
           return (
-            <tr key={key} style={{ cursor: 'pointer' }} className="game-row-clickable">
-              <td>
-                <Link to={`/game/${g.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {row.date}
-                </Link>
-              </td>
-              <td>
-                <Link to={`/game/${g.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {row.teams}
-                </Link>
-              </td>
-              <td>
-                <Link to={`/game/${g.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {row.location}
-                </Link>
-              </td>
-              <td>
-                <Link to={`/game/${g.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {row.time}
-                </Link>
-              </td>
+            <tr
+              key={key}
+              onClick={() => onGameClick(g.id)}
+              style={{ cursor: 'pointer' }}
+              className="game-row-clickable"
+            >
+              <td>{row.date}</td>
+              <td>{row.teams}</td>
+              <td>{row.location}</td>
+              <td>{row.time}</td>
             </tr>
           );
         })}
@@ -63,12 +52,27 @@ function ScheduleTable({ month, games, loading, error }) {
 }
 
 export default function Schedule() {
+  // Estado para el modal
+  const [selectedGameId, setSelectedGameId] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   // Leer juegos de septiembre (mes 8) y octubre (mes 9) de 2026
   const [septemberGames, septLoading, septError] = useGamesByMonth(8, 2026);
   const [octoberGames, octLoading, octError] = useGamesByMonth(9, 2026);
   
   // Leer ubicaciones
   const [locations, locLoading, locError] = useLocations();
+
+  const handleGameClick = (gameId) => {
+    setSelectedGameId(gameId)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    // Limpiar el ID con un pequeño delay para que la animación de cierre funcione
+    setTimeout(() => setSelectedGameId(null), 300)
+  }
 
   const accordionItems = [
     {
@@ -81,12 +85,14 @@ export default function Schedule() {
             games={septemberGames} 
             loading={septLoading}
             error={septError}
+            onGameClick={handleGameClick}
           />
           <ScheduleTable 
             month="October" 
             games={octoberGames} 
             loading={octLoading}
             error={octError}
+            onGameClick={handleGameClick}
           />
         </div>
       ),
@@ -148,6 +154,13 @@ export default function Schedule() {
           </a>
         </p>
       </div>
+
+      {/* Modal de detalles del juego */}
+      <GameDetailModal
+        gameId={selectedGameId}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   )
 }

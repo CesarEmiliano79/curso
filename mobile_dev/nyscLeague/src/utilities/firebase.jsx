@@ -1,7 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref } from 'firebase/database';
+import { getDatabase, ref, push, set } from 'firebase/database';
 import { useObject } from "react-firebase-hooks/database";
 import { useMemo } from 'react';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { useAuthState as useFirebaseAuthState } from 'react-firebase-hooks/auth';
+import { validateMessage, validateRegistration } from './validators.js';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -16,6 +19,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
 export const database = getDatabase(firebase);
+export const auth = getAuth(firebase);
 
 // ===== Hooks básicos genéricos =====
 export const useData = (path, transform) => {
@@ -148,6 +152,105 @@ export const useGamesByMonth = (month, year) => {
   return [games, loading, error];
 };
 
+// ===== Hooks para Mensajes / Comentarios de un juego =====
+// Los comentarios se guardan en la rama: messages/{gameId}/{messageId}
+export const useMessages = (gameId) => {
+  const [snapshot, loading, error] = useObject(
+    gameId ? ref(database, `messages/${gameId}`) : null
+  );
+
+  const messages = useMemo(() => {
+    if (!snapshot) return [];
+    const data = snapshot.val();
+    if (!data) return [];
+
+    // Convertimos el objeto de Firebase en un arreglo, conservando el id (key) de cada mensaje
+    return Object.entries(data)
+      .map(([id, msg]) => ({ ...msg, id })) // el id de Firebase siempre gana
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // más reciente primero
+  }, [snapshot]);
+
+  return [messages, loading, error];
+};
+
+// Guarda un nuevo comentario en messages/{gameId}
+export const addMessage = async (gameId, message) => {
+  const fullMessage = {
+    ...message,
+    gameId,
+    timestamp: message.timestamp || new Date().toISOString(),
+  }
+
+  const { valid, errors } = validateMessage(fullMessage)
+  if (!valid) {
+    throw new Error(`Invalid message data: ${errors.join(', ')}`)
+  }
+
+  try {
+    const messagesRef = ref(database, `messages/${gameId}`);
+    const newMessageRef = push(messagesRef); // genera un id único
+    await set(newMessageRef, fullMessage);
+    return newMessageRef.key;
+  } catch (error) {
+    console.error('Error al guardar el comentario en Firebase:', error);
+    throw error;
+  }
+};
+
+// ===== Hooks para Registrations (inscripción de jugadores) =====
+// Las inscripciones se guardan en la rama: registrations/{registrationId}
+export const useRegistrations = () => {
+  const [snapshot, loading, error] = useObject(ref(database, 'registrations'));
+
+  const registrations = useMemo(() => {
+    if (!snapshot) return [];
+    const data = snapshot.val();
+    if (!data) return [];
+
+    return Object.entries(data)
+      .map(([id, reg]) => ({ ...reg, id }))
+      .sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at)); // más reciente primero
+  }, [snapshot]);
+
+  return [registrations, loading, error];
+};
+
+export const useRegistration = (registrationId) => {
+  const [snapshot, loading, error] = useObject(
+    registrationId ? ref(database, `registrations/${registrationId}`) : null
+  );
+
+  const registration = useMemo(() => {
+    if (!snapshot) return null;
+    const data = snapshot.val();
+    if (!data) return null;
+    return { ...data, id: registrationId };
+  }, [snapshot, registrationId]);
+
+  return [registration, loading, error];
+};
+
+// Guarda una nueva inscripción de jugador en registrations/{id}
+export const addRegistration = async (registrationData) => {
+  const { valid, errors } = validateRegistration(registrationData)
+  if (!valid) {
+    throw new Error(`Invalid registration data: ${errors.join(', ')}`)
+  }
+
+  try {
+    const registrationsRef = ref(database, 'registrations');
+    const newRegistrationRef = push(registrationsRef); // genera un id único
+    await set(newRegistrationRef, {
+      ...registrationData,
+      submitted_at: new Date().toISOString(),
+    });
+    return newRegistrationRef.key;
+  } catch (error) {
+    console.error('Error al guardar la inscripción en Firebase:', error);
+    throw error;
+  }
+};
+
 // ===== Utilidad: Convertir juegos a formato para ScheduleTable =====
 export const transformGameToTableRow = (game) => {
   // Parsear la fecha correctamente (YYYY-MM-DD) sin timezone issues
@@ -164,4 +267,30 @@ export const transformGameToTableRow = (game) => {
     location: game.location.name,
     time: game.time,
   };
+};
+
+// ===== Auth Hooks y funciones =====
+export const signInWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return result.user;
+  } catch (error) {
+    console.error('Error signing in with Google:', error);
+    throw error;
+  }
+};
+
+export const firebaseSignOut = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error('Error signing out:', error);
+    throw error;
+  }
+};
+
+// Hook para obtener el estado del usuario autenticado
+export const useAuthState = () => {
+  return useFirebaseAuthState(auth);
 };

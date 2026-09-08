@@ -13,6 +13,9 @@ import './styles/global.css'
 import './styles/layout.css'
 import './styles/components.css'
 import './styles/pages.css'
+import './styles/announcements-style.css'
+import './styles/topbar-styles.css'
+import './styles/modal-styles.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
