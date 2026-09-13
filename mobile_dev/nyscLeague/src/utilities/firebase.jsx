@@ -1,10 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, push, set } from 'firebase/database';
-import { useObject } from "react-firebase-hooks/database";
+import { getDatabase, ref, push, set, remove, get } from 'firebase/database';
+import { useObject, useList } from "react-firebase-hooks/database";
 import { useMemo } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { useAuthState as useFirebaseAuthState } from 'react-firebase-hooks/auth';
-import { validateMessage, validateRegistration } from './validators.js';
+import { validateMessage, validateRegistration, validatePicture } from './validators.js';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -247,6 +247,73 @@ export const addRegistration = async (registrationData) => {
     return newRegistrationRef.key;
   } catch (error) {
     console.error('Error al guardar la inscripción en Firebase:', error);
+    throw error;
+  }
+};
+
+// Da o quita el like de un usuario a un comentario.
+// Se guarda en messages/{gameId}/{messageId}/likedBy/{userId} = true,
+// así que por diseño una cuenta nunca puede aportar más de 1 like al conteo.
+export const toggleMessageLike = async (gameId, messageId, userId) => {
+  if (!gameId || !messageId || !userId) {
+    throw new Error('gameId, messageId y userId son requeridos para dar like');
+  }
+
+  const likeRef = ref(database, `messages/${gameId}/${messageId}/likedBy/${userId}`);
+
+  try {
+    const snapshot = await get(likeRef);
+    if (snapshot.exists()) {
+      await remove(likeRef); // ya le había dado like -> se lo quita
+      return false;
+    } else {
+      await set(likeRef, true); // no le había dado like -> se lo da
+      return true;
+    }
+  } catch (error) {
+    console.error('Error al actualizar el like en Firebase:', error);
+    throw error;
+  }
+};
+
+// ===== Hooks para Pictures (galería de fotos por juego) =====
+// Estructura en la base: pictures/{gameId}/{pictureId} = { url, authorId, authorName, timestamp }
+export const usePictures = (gameId) => {
+  const [snapshots, loading, error] = useList(
+    gameId ? ref(database, `pictures/${gameId}`) : null
+  );
+
+  const pictures = useMemo(() => {
+    if (!snapshots) return [];
+    return snapshots
+      .map((snap) => ({ id: snap.key, ...snap.val() }))
+      .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)); // más reciente primero
+  }, [snapshots]);
+
+  return [pictures, loading, error];
+};
+
+// Guarda los datos de una foto ya subida a Cloudinary en pictures/{gameId}
+export const addPicture = async (gameId, pictureData) => {
+  if (!gameId) {
+    throw new Error('gameId is required to save a picture');
+  }
+
+  const { valid, errors } = validatePicture(pictureData)
+  if (!valid) {
+    throw new Error(`Invalid picture data: ${errors.join(', ')}`)
+  }
+
+  try {
+    const picturesRef = ref(database, `pictures/${gameId}`);
+    const newPictureRef = push(picturesRef); // genera un id único
+    await set(newPictureRef, {
+      ...pictureData,
+      timestamp: Date.now(), // epoch ms, como en el ejemplo del PDF
+    });
+    return newPictureRef.key;
+  } catch (error) {
+    console.error('Error al guardar la foto en Firebase:', error);
     throw error;
   }
 };

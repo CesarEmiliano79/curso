@@ -86,12 +86,38 @@ export function validateMessage(message) {
   if (message.userPhotoURL !== undefined && message.userPhotoURL !== null && typeof message.userPhotoURL !== 'string') {
     errors.push('userPhotoURL must be text (a URL)')
   }
-  if (message.likes !== undefined && typeof message.likes !== 'number') {
-    errors.push('likes must be a number')
+  // El conteo de likes ya no se envía directo: sale de likedBy (uid -> true) en Firebase
+  if (message.likedBy !== undefined && (typeof message.likedBy !== 'object' || message.likedBy === null || Array.isArray(message.likedBy))) {
+    errors.push('likedBy must be an object mapping userId -> true')
   }
-  if (message.replies !== undefined && typeof message.replies !== 'number') {
-    errors.push('replies must be a number')
+
+  return { valid: errors.length === 0, errors }
+}
+
+const isValidUrl = (value) => {
+  if (!isNonEmptyString(value)) return false
+  try {
+    new URL(value.trim())
+    return true
+  } catch {
+    return false
   }
+}
+
+/**
+ * Valida los datos de una foto antes de guardarla en pictures/{gameId}.
+ * @returns {{ valid: boolean, errors: string[] }}
+ */
+export function validatePicture(picture) {
+  const errors = []
+
+  if (!picture || typeof picture !== 'object') {
+    return { valid: false, errors: ['Picture data is missing or invalid'] }
+  }
+
+  if (!isValidUrl(picture.url)) errors.push('url must be a valid URL (the Cloudinary image URL)')
+  if (!isNonEmptyString(picture.authorId)) errors.push('authorId must be text')
+  if (!isNameLike(picture.authorName)) errors.push('authorName must be text, not a number')
 
   return { valid: errors.length === 0, errors }
 }

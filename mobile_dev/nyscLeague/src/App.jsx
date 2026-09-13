@@ -7,6 +7,7 @@ import Contact from './pages/Contact.jsx'
 import Rules from './pages/Rules.jsx'
 import Schedule from './pages/Schedule.jsx'
 import Announcements from './pages/Announcements.jsx'
+import GamePictures from './pages/GamePictures.jsx'
 import Registration from './pages/Registration.jsx'
 import Login from './pages/Login.jsx'
 
@@ -87,6 +88,12 @@ function AppRoutes() {
               <Route
                 path="/announcements"
                 element={<ProtectedRoute element={<Announcements />} />}
+              />
+
+              {/* Galería de fotos por juego - solo para usuarios autenticados */}
+              <Route
+                path="/photos/:id"
+                element={<ProtectedRoute element={<GamePictures />} />}
               />
             </Routes>
           </Layout>

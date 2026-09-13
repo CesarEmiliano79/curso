@@ -140,3 +140,51 @@
     order: 3;
   }
 }
+
+/* ===== Galería de fotos del juego (/photos/:id) ===== */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.photo-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.photo-author {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.photo-time {
+  color: #6b7280;
+}
+
+@media (max-width: 480px) {
+  .photo-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+}

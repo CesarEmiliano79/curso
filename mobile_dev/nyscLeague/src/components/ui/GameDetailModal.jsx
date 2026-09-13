@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useGame, transformGameToTableRow, useMessages, addMessage } from '../../utilities/firebase.jsx'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import MessageCard from './MessageCard.jsx'
@@ -162,7 +163,14 @@ export default function GameDetailModal({ gameId, isOpen, onClose }) {
 
           {/* Sección de Comentarios: extensión continua de los detalles del juego */}
           <div className="announcements-section">
-            <h3 className="announcements-title">Game Discussion</h3>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginTop: 8, marginBottom: 16 }}>
+              <h3 className="announcements-title" style={{ margin: 0 }}>Game Discussion</h3>
+              {user && gameId && (
+                <Link to={`/photos/${gameId}`} className="btn btn-outline-secondary" onClick={onClose}>
+                  📷 View Photos
+                </Link>
+              )}
+            </div>
 
             {/* Formulario para agregar comentario */}
             {user ? (
