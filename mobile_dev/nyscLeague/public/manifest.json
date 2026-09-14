@@ -1,0 +1,35 @@
+{
+  "short_name": "NYSL",
+  "name": "Northside Youth Soccer League",
+  "description": "Schedules, announcements, and player registration for the Northside Youth Soccer League",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#22c55e",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "public/icons/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "public/icons/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "public/icons/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "public/icons/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
